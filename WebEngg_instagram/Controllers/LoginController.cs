@@ -26,12 +26,18 @@ namespace WebEngg_instagram.Controllers
         {
             string username = fc["Username"];
             string password = fc["Password"];
-
-            Models.LoginModel lm = new Models.LoginModel();
-            if(lm.logincheck(username,password))
+            if(username != null && password != null)
             {
-                return RedirectToAction("check", "Home");
+                Models.LoginModel lm = new Models.LoginModel();
+                if (lm.logincheck(username, password))
+                {
+                    Session["user"] = username;
+                    TempData["Error"] = "";
+                    return RedirectToAction("Index", "Home");
+                }
+                TempData["Error"] = "Invalid ID/Pass";
             }
+            
             return RedirectToAction("Index");
         }
     }

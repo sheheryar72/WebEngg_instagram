@@ -10,7 +10,16 @@ namespace WebEngg_instagram.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("Index","Login");
+            if (IsUserLoggedIn())
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Login");
+        }
+
+        private bool IsUserLoggedIn()
+        {
+            return Session["user"] != null;
         }
 
         public ActionResult check()

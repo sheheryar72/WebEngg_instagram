@@ -38,6 +38,7 @@
       h1 {
       text-align:center;
       fone-size:18;
+      font-family:'Segoe Script'
       }
       button:hover {
       opacity: 0.8;
@@ -65,9 +66,8 @@
 </head>
 <body>
     <br />
-    <h2>Instagram</h2>
     <form action="/Login/Authenticate" method="post">
-        <h1>Login Form</h1>
+        <h1>Instagram</h1>
         <div class="formcontainer">
             <hr />
             <div class="container">
@@ -76,14 +76,19 @@
                 <label for="psw"><strong>Password</strong></label>
                 <input type="password" placeholder="Enter Password" name="Password" required>
             </div>
+            @if (TempData["Error"] != null)
+            {
+                <p style="color:red">@TempData["Error"]</p>
+            }
             <button type="submit">Login</button>
             <div class="container" style="background-color: #eee">
                 <label style="padding-left: 15px">
                     <input type="checkbox" checked="checked" name="remember"> Remember me
                 </label>
                 <span class="psw"><a href="#"> Forgot password?</a></span>
+                <span class="psw"><a href="#"> Create New Account or Signup<a></span>
             </div>
-    </form>
+</form>
 
 </body>
 </html>
