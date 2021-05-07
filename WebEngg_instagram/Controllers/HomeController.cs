@@ -14,7 +14,7 @@ namespace WebEngg_instagram.Controllers
             {
                 return View();
             }
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Login", "User");
         }
 
         private bool IsUserLoggedIn()

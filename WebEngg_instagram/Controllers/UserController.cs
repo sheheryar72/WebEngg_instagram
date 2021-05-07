@@ -8,15 +8,20 @@ using System.Web.Mvc;
 
 namespace WebEngg_instagram.Controllers
 {
-    public class LoginController : Controller
+    public class UserController : Controller
     {
         // GET: Login
-        public ActionResult Index()
+        public ActionResult Login()
         {
             return View();
         }
 
-        public ActionResult Signup()
+        public ActionResult SignUp()
+        {
+            return View();
+        }
+
+        public ActionResult RecoverYourAccount()
         {
             return View();
         }
@@ -28,8 +33,8 @@ namespace WebEngg_instagram.Controllers
             string password = fc["Password"];
             if(username != null && password != null)
             {
-                Models.LoginModel lm = new Models.LoginModel();
-                if (lm.logincheck(username, password))
+                Models.LoginModel log = new Models.LoginModel();
+                if (log.LoggingIn(username, password))
                 {
                     Session["user"] = username;
                     TempData["Error"] = "";
@@ -38,7 +43,7 @@ namespace WebEngg_instagram.Controllers
                 TempData["Error"] = "Invalid ID/Pass";
             }
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Login");
         }
     }
 }

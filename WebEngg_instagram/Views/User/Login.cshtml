@@ -37,7 +37,7 @@
       }
       h1 {
       text-align:center;
-      fone-size:18;
+      font-size :18;
       font-family:'Segoe Script'
       }
       button:hover {
@@ -46,9 +46,10 @@
       .formcontainer {
       text-align: left;
       margin: 24px 50px 12px;
+      margin-top : 30px;
       }
       .container {
-      padding: 16px 0;
+      padding: 20px 0;
       text-align:left;
       }
       span.psw {
@@ -56,6 +57,12 @@
       padding-top: 0;
       padding-right: 15px;
       }
+    span.ps 
+    {
+        float: left;
+        padding-top: 0;
+        padding-right: 15px;
+    }
       /* Change styles for span on extra small screens */
       @*@media screen and (max-width: 300px) {
       span.psw {
@@ -66,7 +73,7 @@
 </head>
 <body>
     <br />
-    <form action="/Login/Authenticate" method="post">
+    <form action="/User/Authenticate" method="post">
         <h1>Instagram</h1>
         <div class="formcontainer">
             <hr />
@@ -82,11 +89,11 @@
             }
             <button type="submit">Login</button>
             <div class="container" style="background-color: #eee">
-                <label style="padding-left: 15px">
-                    <input type="checkbox" checked="checked" name="remember"> Remember me
-                </label>
-                <span class="psw"><a href="#"> Forgot password?</a></span>
-                <span class="psw"><a href="#"> Create New Account or Signup<a></span>
+                <span class="psw"><a href="/User/RecoverYourAccount"> Forgot password?</a></span>
+                <span class="ps"><a href="/User/SignUp"> Create New Account or Signup<a></span>
+                @*<label style="padding-left: 15px">
+            <input type="checkbox" checked="checked" name="remember"> Remember me
+        </label>*@
             </div>
 </form>
 
