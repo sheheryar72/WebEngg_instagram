@@ -17,14 +17,16 @@ namespace WebEngg_instagram.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        private bool IsUserLoggedIn()
-        {
-            return Session["user"] != null;
-        }
+       
 
         public ActionResult check()
         {
             return View();
+        }
+
+        private bool IsUserLoggedIn()
+        {
+            return Session["user"] != null;
         }
     }
 }

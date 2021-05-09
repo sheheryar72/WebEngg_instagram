@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-//using Models;
+using WebEngg_instagram.Models;
 
 
 namespace WebEngg_instagram.Controllers
@@ -27,13 +27,14 @@ namespace WebEngg_instagram.Controllers
         }
 
         [HttpPost]
-        public ActionResult Authenticate(FormCollection fc)
+        public ActionResult Authenticate(FormCollection form)
         {
-            string username = fc["Username"];
-            string password = fc["Password"];
+            string username = form["Username"];
+            string password = form["Password"];
+
             if(username != null && password != null)
             {
-                Models.LoginModel log = new Models.LoginModel();
+                LoginModel log = new LoginModel();
                 if (log.LoggingIn(username, password))
                 {
                     Session["user"] = username;
