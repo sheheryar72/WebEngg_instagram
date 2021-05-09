@@ -144,7 +144,7 @@ namespace WebEngg_instagram.Models
                 }
                 else if (parameterValues[i] == null)
                 {
-                    commandParameters[i].Value = DBNull.Value;
+                    //commandParameters[i].Value = DBNull.Value;
                 }
                 else
                 {

@@ -4,8 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
-//using WebEngg_instagram.Models;
-
 namespace WebEngg_instagram.Models
 {
     public class LoginModel
@@ -19,12 +17,12 @@ namespace WebEngg_instagram.Models
 
         public bool LoggingIn(string username ,string password)
         {
-            string query = "Select * from Credential where username = @user";
+            string query = "Select * from Credential where username = @user and password = @pass";
             DataTable dt = new DataTable();
             SqlDataHelper sdh = new SqlDataHelper();
-
-            SqlParameter[] param = new SqlParameter[1];
+            SqlParameter[] param = new SqlParameter[2];
             param[0] = new SqlParameter("@user", username);
+            param[1] = new SqlParameter("@pass", password);
 
             dt = sdh.Select(query, param);
 
