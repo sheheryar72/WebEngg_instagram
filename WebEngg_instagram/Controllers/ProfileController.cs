@@ -14,11 +14,19 @@ namespace WebEngg_instagram.Controllers
         private string name = "";
         private string bio = "";
         private string prof_addr = "";
+
         ArrayList followers_list = new ArrayList();
         ArrayList following_list = new ArrayList();
 
+        ArrayList likes_list = new ArrayList();
+        ArrayList comments_list = new ArrayList();
+        ArrayList comments_list_un = new ArrayList();
+        
         ArrayList posts_list = new ArrayList();
+        ArrayList posts_ID_list = new ArrayList();
 
+        ArrayList No_of_likes = new ArrayList();
+        ArrayList No_of_comments = new ArrayList();
 
         public ActionResult Index()
         {
@@ -37,77 +45,88 @@ namespace WebEngg_instagram.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        private void Profile_Data(string prof)
+        public ActionResult User(string username)
         {
-            DataTable[] dt = new DataTable[4];    
-            ProfileModel pm = new ProfileModel();
-            dt = pm.ProfileDataExtractor(prof);     //1: user , 2: post , 3:followers , 4: followings
-
-
-            if (dt[0] != null && dt[0].Rows.Count > 0) // 1: User
-            {
-                prof_addr = dt[0].Rows[0]["Profile_Pic"].ToString();
-                name = dt[0].Rows[0]["Name"].ToString();
-                bio = dt[0].Rows[0]["Bio"].ToString();
-                Set_Profile(name, prof_addr ,bio);
-            }else { }
-
-
-            //TODO : work pending here
-            if (dt[1] != null && dt[1].Rows.Count > 0) // 1: Post
-            {
-
-                foreach (DataRow dr in dt[1].Rows)
-                {
-                    
-                    posts_list.Add(dr["Source"].ToString());
-                }
-            }
-            else{ }
-            
-            if (dt[2] != null && dt[2].Rows.Count > 0) // 1: Followers
-            {
-                foreach(DataRow dr in dt[2].Rows)
-                {
-                    followers_list.Add(dr["Follower_ID"].ToString());
-                }
-            }
-            else
-            { }
-            
-            if (dt[3] != null && dt[3].Rows.Count > 0) // 1: Following
-            {
-                foreach (DataRow dr in dt[3].Rows)
-                {
-                    following_list.Add(dr["Username"].ToString());
-                }
-            }
-            else{  }
-            Set_Profile();
+            TempData["userprofile"] = username;
+            Profile_Data(username);
+            return View();
         }
 
-        public void Set_Profile(string name , string prof_address , string bio)
+        private void Profile_Data(string prof)
+        {
+            DataTable[] dt = new DataTable[8];    
+
+            ProfileModel pm = new ProfileModel();
+            dt = pm.ProfileDataExtractor(prof);     //1: user , 2: post , 3:followers , 4: followings ,5 : likes , 6: comments ,7: No of likes , 8: No of comments per post
+
+            ProfileData(dt[0]); // user
+
+            posts_list = Data_Extractor(dt[1], "Source"); // post
+            posts_list = Data_Extractor(dt[1], "Source"); // post
+
+            followers_list = Data_Extractor(dt[2], "Follower_ID");  // followers
+            following_list = Data_Extractor(dt[3], "Username"); // followings
+
+            likes_list = Data_Extractor(dt[4], "Username"); // Likes
+
+            comments_list_un = Data_Extractor(dt[5], "Username"); // Comments
+            comments_list = Data_Extractor(dt[5], "comment"); // Comments
+
+            No_of_likes = Data_Extractor(dt[6], "No_of_Likes"); // Comments
+            No_of_comments = Data_Extractor(dt[7], "No_of_Comments"); // Comments
+
+            HTML_Data_Print(name, prof_addr, bio);
+        }
+
+        public void ProfileData(DataTable dt)
+        {
+            if (dt != null && dt.Rows.Count > 0) // 1: User
+            {
+                prof_addr = dt.Rows[0]["Profile_Pic"].ToString();
+                name = dt.Rows[0]["Name"].ToString();
+                bio = dt.Rows[0]["Bio"].ToString();
+               
+            }
+            else { prof_addr = ""; name = ""; bio = ""; }
+        }
+
+        public ArrayList Data_Extractor(DataTable dt , string val)
+        {
+            ArrayList temp = new ArrayList();
+            if (dt != null && dt.Rows.Count > 0) // 1: Post
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    temp.Add(dr[val].ToString());
+                }
+                return temp;
+            }
+            else { temp = null; return temp; }
+        }
+
+        public void HTML_Data_Print(string name , string prof_address , string bio)
         {
             TempData["name"] = name;
             TempData["bio"] = bio;
             TempData["picture"] = prof_addr;
-            
 
-            // TODO print value on page
-        }
-
-        public void Set_Profile()
-        {
             TempData["follower"] = followers_list.Count;
             TempData["following"] = following_list.Count;
             TempData["post"] = posts_list.Count;
-            for(int i = 0; i < posts_list.Count; i++)
-            {
-                ViewData[i.ToString()] = posts_list[i];
-            }
 
-            // TODO print value on page
+
+    
+            TempData["Likes"] = likes_list.Count;
+            TempData["Comments"] = comments_list.Count;
+
+            for (int i = 0; i < posts_list.Count; i++)
+            {
+                ViewData["post"+i.ToString()] = posts_list[i]; // show posts
+                ViewData["likes" + i.ToString()] = No_of_likes[i];
+                ViewData["comments" + i.ToString()] = No_of_comments[i];
+            }
         }
+
 
         private bool IsUserLoggedIn()
         {

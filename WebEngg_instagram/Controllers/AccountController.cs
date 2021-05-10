@@ -21,6 +21,11 @@ namespace WebEngg_instagram.Controllers
         // GET: Account
         public ActionResult Index()
         {
+            return RedirectToAction("Edit");
+        }
+
+        public ActionResult Edit()
+        {
             return View();
         }
 

@@ -4,9 +4,7 @@
 
 }
 
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -361,8 +359,9 @@
             <div class="profile-user-settings">
 
                 <h1 class="profile-user-name">@TempData["name"]</h1>
+                <button > Follow </button>
 
-                <button class="btn profile-edit-btn">Edit Profile</button>
+                <button onclick="/Account/Edit" class="btn profile-edit-btn">Edit Profile</button>
 
                 <button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
 
@@ -396,11 +395,11 @@
                 @for (int i = 0; i < Convert.ToInt32(TempData["post"]); i++)
                         { /*"~/Data/Instagram/fallen12/post/pst1.jpg"*/
                     <div class="gallery-item" tabindex="0">
-                        <img src= @ViewData[i.ToString()] class="gallery-image" alt="">
+                        <img src= @ViewData["post"+i.ToString()] class="gallery-image" alt="">
                         <div class="gallery-item-info">
                             <ul>
-                                <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 56</li>
-                                <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 2</li>
+                                <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> @ViewData["likes" + i.ToString()]</li>
+                                <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i>@ViewData["comments" + i.ToString()]</li>
                             </ul>
                         </div>
                     </div>
