@@ -31,10 +31,10 @@ namespace WebEngg_instagram.Controllers
         public ActionResult Index()
         {
 
-            return RedirectToAction("profile");
+            return RedirectToAction("YourProfile");
         }
 
-        public ActionResult profile()
+        public ActionResult MyProfile()
         {
             if (IsUserLoggedIn())
             {
@@ -45,7 +45,7 @@ namespace WebEngg_instagram.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        public ActionResult User(string username)
+        public ActionResult OtherUsers(string username)
         {
             TempData["userprofile"] = username;
             Profile_Data(username);

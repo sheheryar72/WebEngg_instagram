@@ -78,6 +78,7 @@ namespace WebEngg_instagram.Models
                 SqlCommand cmd = new SqlCommand(Querys, connection);
                 AssignParameterValues(command_parameter, command_parameter);
                 AttachParameters(cmd, command_parameter);
+
                 SqlDataReader reader = cmd.ExecuteReader();
                 dt.Load(reader);
                 CloseConnection();

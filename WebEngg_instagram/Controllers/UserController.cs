@@ -39,7 +39,7 @@ namespace WebEngg_instagram.Controllers
                 {
                     Session["user"] = username;
                     TempData["Error"] = "";
-                    return RedirectToAction("profile", "Profile");
+                    return RedirectToAction("MyProfile", "Profile");
                 }
                 TempData["Error"] = "Invalid ID/Pass";
             }
