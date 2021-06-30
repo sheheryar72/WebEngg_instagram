@@ -122,30 +122,49 @@ namespace WebEngg_instagram.Controllers
             TempData["picture"] = prof_addr;
             try
             {
-                if(followers_list.Count<0)
+                //TODO: Sort out error of open page for new user.....and also for user who has not post anything
+                if (followers_list!=null)
                 {
-                    //TODO: Sort out error of open page for new user.....and also for user who has not post anything
+                    TempData["follower"] = followers_list.Count;
                 }
-                
-                TempData["follower"] = followers_list.Count;
-                TempData["following"] = following_list.Count;
-                TempData["post"] = posts_list.Count;
+                else { TempData["follower"] = 0; }
+                if (posts_list != null)
+                {
+                    TempData["post"] = posts_list.Count;
+                }
+                else { TempData["post"] = 0; }
 
+                if (following_list != null)
+                {
+                    TempData["following"] = following_list.Count;
+                }
+                else { TempData["following"] = 0; }
 
+                if (likes_list != null)
+                {
+                    TempData["Likes"] = likes_list.Count;
+                }
+                else { TempData["Likes"] = 0; }
 
-                TempData["Likes"] = likes_list.Count;
-                TempData["Comments"] = comments_list.Count;
+                if (comments_list != null)
+                {
+                    TempData["Comments"] = comments_list.Count;
+                }
+                else { TempData["Comments"] = 0; }
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             { }
-
-            for (int i = 0; i < posts_list.Count; i++)
+            if (posts_list != null)
             {
-                ViewData["post"+i.ToString()] = posts_list[i]; // show posts
-                if (i < No_of_likes.Count)
-                { ViewData["likes" + i.ToString()] = No_of_likes[i]; }
-                if(i< No_of_comments.Count)
-                { ViewData["comments" + i.ToString()] = No_of_comments[i]; }
+                for (int i = 0; i < posts_list.Count; i++)
+                {
+                    ViewData["post" + i.ToString()] = posts_list[i]; // show posts
+                    if (i < No_of_likes.Count)
+                    { ViewData["likes" + i.ToString()] = No_of_likes[i]; }
+                    if (i < No_of_comments.Count)
+                    { ViewData["comments" + i.ToString()] = No_of_comments[i]; }
+                }
             }
         }
 
