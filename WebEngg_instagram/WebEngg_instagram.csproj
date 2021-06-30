@@ -127,6 +127,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -134,18 +135,21 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModel.cs" />
+    <Compile Include="Models\DatabaseHelper.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\ProfileModel.cs" />
     <Compile Include="Models\SqlDataHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\reset.css" />
     <Content Include="Content\styles.css" />
-    <Content Include="Data\Instagram\fallen12\fallen12.jpg" />
+    <Content Include="Data\Instagram\damon\damon.jpg" />
+    <Content Include="Data\Instagram\elena\elena.jpg" />
+    <Content Include="Data\Instagram\fallen12\fallen.jpg" />
     <Content Include="Data\Instagram\fallen12\post\pst1.jpg" />
     <Content Include="Data\Instagram\fallen12\post\pst2.jpg" />
     <Content Include="Data\Instagram\fallen12\post\pst3.jpg" />
+    <Content Include="Data\Instagram\stefan\stefan.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -173,11 +177,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="packages.config" />
-    <Content Include="Views\User\SignUp.cshtml" />
     <Content Include="Views\User\RecoverYourAccount.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Profile\MyProfile.cshtml" />
     <Content Include="Views\Account\ModifyAccount.cshtml" />
+    <Content Include="Views\API\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

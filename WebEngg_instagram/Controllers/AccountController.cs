@@ -10,15 +10,6 @@ namespace WebEngg_instagram.Controllers
 {
     public class AccountController : Controller
     {
-        private string username;
-        private string name;
-        private string Phone;
-        private string Email;
-        private string Country;
-        private string Gender;
-        private string DOB;
-        private string bio;
-        // GET: Account
         public ActionResult Index()
         {
             return RedirectToAction("ModifyAccount");

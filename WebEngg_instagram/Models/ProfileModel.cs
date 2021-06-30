@@ -50,19 +50,24 @@ namespace WebEngg_instagram.Models
         private DataTable DataExtractor(string query,string username)
         {
             DataTable dt = new DataTable();
-            SqlDataHelper sdh = new SqlDataHelper();
-            SqlParameter[] param = new SqlParameter[2];
-            param[0] = new SqlParameter("@user", username);
+            string Type = "TEXT";
+            var parameters = new Dictionary<string, object>()
+                {
+                    { "user", username },
+                    { "ExampleOfNullParam", (object)DBNull.Value }
+                };
+
+            DatabaseHelper dh = new DatabaseHelper(connStr);
             if (username != "")
             {
-                dt = sdh.Select(query, param);
+                dt = dh.GetData(query, Type , parameters);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    return dt;
+                }
             }
-
-            if (dt != null && dt.Rows.Count > 0)
-            {
-                return dt;
-            }
-            else { return dt; }
+            dt = null;
+            return dt; 
         }
 
         public bool SigningUp()

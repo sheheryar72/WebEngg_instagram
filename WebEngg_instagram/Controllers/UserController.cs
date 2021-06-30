@@ -16,9 +16,26 @@ namespace WebEngg_instagram.Controllers
             return View();
         }
 
-        public ActionResult SignUp()
+        [HttpPost]
+        public ActionResult SignUp(FormCollection form)
         {
-            return View();
+            string name = form.Get("name");
+            string email = form.Get("email");
+            string username = form.Get("usernames");
+            string password = form.Get("passwords");
+
+            if(name!="" && email!="" && username!="" && password!="")
+            {
+                LoginModel LM = new LoginModel();
+                if(!LM.CheckUser(username))
+                {
+                    if(LM.SigningUp(name, email, username, password))
+                    {
+                        return RedirectToAction("Login");
+                    }
+                }
+            }
+            return RedirectToAction("Login");
         }
 
         public ActionResult RecoverYourAccount()

@@ -45,6 +45,7 @@ namespace WebEngg_instagram.Controllers
             return RedirectToAction("Login", "User");
         }
 
+        [HttpPost]
         public ActionResult OtherUsers(string username)
         {
             TempData["userprofile"] = username;
@@ -52,6 +53,16 @@ namespace WebEngg_instagram.Controllers
             return View();
         }
 
+        public ActionResult Signout()
+        {
+            if(IsUserLoggedIn())
+            {
+                Session["User"] = null;
+                Session.Abandon();
+                return RedirectToAction("Login", "User");
+            }
+            return RedirectToAction("Login", "User");
+        }
         private void Profile_Data(string prof)
         {
             DataTable[] dt = new DataTable[8];    
@@ -109,21 +120,32 @@ namespace WebEngg_instagram.Controllers
             TempData["name"] = name;
             TempData["bio"] = bio;
             TempData["picture"] = prof_addr;
+            try
+            {
+                if(followers_list.Count<0)
+                {
+                    //TODO: Sort out error of open page for new user.....and also for user who has not post anything
+                }
+                
+                TempData["follower"] = followers_list.Count;
+                TempData["following"] = following_list.Count;
+                TempData["post"] = posts_list.Count;
 
-            TempData["follower"] = followers_list.Count;
-            TempData["following"] = following_list.Count;
-            TempData["post"] = posts_list.Count;
 
 
-    
-            TempData["Likes"] = likes_list.Count;
-            TempData["Comments"] = comments_list.Count;
+                TempData["Likes"] = likes_list.Count;
+                TempData["Comments"] = comments_list.Count;
+            }
+            catch(Exception ex)
+            { }
 
             for (int i = 0; i < posts_list.Count; i++)
             {
                 ViewData["post"+i.ToString()] = posts_list[i]; // show posts
-                ViewData["likes" + i.ToString()] = No_of_likes[i];
-                ViewData["comments" + i.ToString()] = No_of_comments[i];
+                if (i < No_of_likes.Count)
+                { ViewData["likes" + i.ToString()] = No_of_likes[i]; }
+                if(i< No_of_comments.Count)
+                { ViewData["comments" + i.ToString()] = No_of_comments[i]; }
             }
         }
 

@@ -12,16 +12,16 @@
     <link href='' rel='stylesheet'>
     <style>
         body {
-            background: rgb(99, 39, 120)
+            background: black;
         }
 
         .form-control:focus {
             box-shadow: none;
-            border-color: #BA68C8
+            /*border-color: #000000*/
         }
 
         .profile-button {
-            background: rgb(99, 39, 120);
+            background: #071796;
             box-shadow: none;
             border: none
         }
@@ -61,32 +61,33 @@
     <script type='text/javascript'></script>
 </head>
 <body oncontextmenu='return false' class='snippet-body'>
-    <div class="container rounded bg-white mt-5 mb-5">
+    @*<h1 style="font-family:'Segoe Script'; color:white; margin-left:20px; font-size:30px">Instagram</h1>*@
+    <div class="container rounded bg-dimgray mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src=@ViewData["prof"].ToString()><a href="#">Change Profile</a><span class="font-weight-bold">@ViewData["name"]</span><span class="text-black-50">@ViewData["email"]</span><span> </span></div>
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src=@ViewData["prof"].ToString()><a href="#" style="color:dodgerblue">Change Profile</a><span class="font-weight-bold" style="color:white">@ViewData["name"]</span><span style="color:white;">@ViewData["email"]</span><span> </span></div>
             </div>
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right">Profile Settings</h4>
+                        <h4 class="text-right" style="color:white">Profile Settings</h4>
                     </div>
                     <!--<div class="row mt-2">
-        <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="Enter Your Name Here" value=""></div>-->
+                    <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="Enter Your Name Here" value=""></div>-->
                     @* <div class="col-md-12"><label class="labels"></label><input type="text" class="form-control" value="" placeholder="surname"></div>*@
                     <!--</div>-->
                     <form action="/Account/ModifyProfile" method="post">
-                        <div class="row mt-3">
-                            <div class="col-md-12"><label class="labels">Name</label><input name="name" type="text" class="form-control" placeholder="Enter Your Name Here" value="@ViewData["name"]"></div>
-                            <div class="col-md-12"><label class="labels">Bio</label><input name="bio" type="text" class="form-control" placeholder="Enter Your Bio Here" value="@ViewData["bio"]"></div>
-                            <div class="col-md-12"><label class="labels">Phone</label><input name="phone" type="text" class="form-control" placeholder="Enter Your Phone Here" value="@ViewData["phone"]"></div>
-                            <div class="col-md-12"><label class="labels">Email Address</label><input name="email" type="text" class="form-control" placeholder="Enter Your Email Address here" value="@ViewData["email"]"></div>
-                            <div class="col-md-12"><label class="labels">City</label><input name="city" type="text" class="form-control" placeholder="Enter Your City Here" value="@ViewData["city"]"></div>
-                            <div class="col-md-12"><label class="labels">Country</label><input name="country" type="text" class="form-control" placeholder="Enter Your Country Here" value="@ViewData["country"]"></div>
-                            <div class="col-md-12"><label class="labels">Gender</label><input name="gender" type="text" class="form-control" placeholder="Enter Your Gender Here" value="@ViewData["gender"]"></div>
-                            <div class="col-md-12"><label class="labels">BirthDay</label><input name="dob" type="text" class="form-control" placeholder="Enter Your BirthDay Here" value="@ViewData["dob"]"></div>
+                        <div class="row mt-3" font-color:white>
+                            <div class="col-md-12"><label class="labels" style="color:white">Name</label><input name="name" type="text" class="form-control" placeholder="Enter Your Name Here" value="@ViewData["name"]"></div>
+                            <div class="col-md-12"><label class="labels" style="color:white">Bio</label><input name="bio" type="text" class="form-control" placeholder="Enter Your Bio Here" value="@ViewData["bio"]"></div>
+                            <div class="col-md-12"><label class="labels"style="color:white">Phone</label><input name="phone" type="text" class="form-control" placeholder="Enter Your Phone Here" value="@ViewData["phone"]"></div>
+                            <div class="col-md-12"><label class="labels"style="color:white">Email Address</label><input name="email" type="text" class="form-control" placeholder="Enter Your Email Address here" value="@ViewData["email"]"></div>
+                            <div class="col-md-12"><label class="labels"style="color:white">City</label><input name="city" type="text" class="form-control" placeholder="Enter Your City Here" value="@ViewData["city"]"></div>
+                            <div class="col-md-12"><label class="labels"style="color:white">Country</label><input name="country" type="text" class="form-control" placeholder="Enter Your Country Here" value="@ViewData["country"]"></div>
+                            <div class="col-md-12"><label class="labels"style="color:white">Gender</label><input name="gender" type="text" class="form-control" placeholder="Enter Your Gender Here" value="@ViewData["gender"]"></div>
+                            <div class="col-md-12"><label class="labels"style="color:white">BirthDay</label><input name="dob" type="text" class="form-control" placeholder="Enter Your BirthDay Here" value="@ViewData["dob"]"></div>
                         </div>
-                        <div class="mt-5 text-center"><button type="submit" class="btn btn-primary profile-button">Save Profile</button></div>
+                        <div class="mt-5 text-center"><button type="submit" class="btn btn-primary profile-button" style="color:white">Save Profile</button></div>
                     </form>
                     @if (ViewBag.Message != null)
                     {
@@ -98,20 +99,20 @@
                         ViewBag.Message = null;
                     }
                     @*<div class="row mt-3">
-            <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
-            <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
-        </div>*@
+                            <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
+                            <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
+                        </div>*@
 
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="p-3 py-5">
                     <form action="/Account/ModifyCredentials" method="post">
-                        @*<div class="d-flex justify-content-between align-items-center experience"><span>Credentials</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>*@
-                        <div class="col-md-12"><label class="labels">Username</label><input name="username" type="text" class="form-control" placeholder="Enter Username Here" required readonly value="@ViewData["username"]"><label>Can't change username</label></div> <br>
-                        <div class="col-md-12"><label class="labels">Confirm Password</label><input name="oldpassword" type="password" class="form-control" required placeholder="Enter Old Password Here" value=""></div>
-                        <div class="col-md-12"><label class="labels">New Password</label><input name="newpassword" type="password" class="form-control" required placeholder="Enter New Password Here" value=""></div>
-                        <div class="mt-5 text-center"><button type="submit" class="btn btn-primary profile-button">Save Credential</button></div>
+                        <div ><span style="color:white"><b style="font-size:20px">Credentials</b></span></div><br>
+                        <div class="col-md-12"><label class="labels"style="color:white">Username</label><input name="username" type="text" class="form-control" placeholder="Enter Username Here" required readonly value="@ViewData["username"]"><label style="color:white">Can't change username</labelstyle="color:white"></div> <br>
+                        <div class="col-md-12"><label class="labels"style="color:white">Confirm Password</label><input name="oldpassword" type="password" class="form-control" required placeholder="Enter Old Password Here" value=""></div>
+                        <div class="col-md-12"><label class="labels"style="color:white">New Password</label><input name="newpassword" type="password" class="form-control" required placeholder="Enter New Password Here" value=""></div>
+                        <div class="mt-5 text-center"><button type="submit" class="btn btn-primary profile-button"style="color:white">Save Credential</button></div>
                     </form>
                 </div>
             </div>

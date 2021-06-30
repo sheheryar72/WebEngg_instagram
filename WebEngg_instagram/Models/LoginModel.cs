@@ -17,14 +17,19 @@ namespace WebEngg_instagram.Models
 
         public bool LoggingIn(string username ,string password)
         {
-            string query = "Select * from Credential where username = @user and password = @pass";
+            string SP = "LoggingIn";
+            string Type = "STOREDPROCEDURE";
             DataTable dt = new DataTable();
-            SqlDataHelper sdh = new SqlDataHelper();
-            SqlParameter[] param = new SqlParameter[2];
-            param[0] = new SqlParameter("@user", username);
-            param[1] = new SqlParameter("@pass", password);
+            var parameters = new Dictionary<string, object>()
+                {
+                    { "user", username },
+                    { "pass", password },
+                  //  { "ExampleOfNullParam", (object)DBNull.Value }
+                };
 
-            dt = sdh.Select(query, param);
+            DatabaseHelper dh = new DatabaseHelper(connStr);
+
+            dt = dh.GetData(SP , Type , parameters);
 
             if (dt != null && dt.Rows.Count > 0)
             {
@@ -37,34 +42,51 @@ namespace WebEngg_instagram.Models
             }
             else { return false; }
         }
-        public bool SigningUp()
+
+        public bool CheckUser(string username)
         {
-            return true;
+            string SP = "GetUserData";
+            string Type = "STOREDPROCEDURE";
+            DataTable dt = new DataTable();
+            var parameters = new Dictionary<string, object>()
+                {
+                    { "user", username }
+                  //  { "ExampleOfNullParam", (object)DBNull.Value }
+                };
+
+            DatabaseHelper dh = new DatabaseHelper(connStr);
+
+            dt = dh.GetData(SP, Type, parameters);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                return true;
+            }
+            else { return false; }
+        }
+        public bool SigningUp(string name , string email , string username , string password)
+        {
+            string SP = "InsertUser";
+            string Type = "STOREDPROCEDURE";
+            DataTable dt = new DataTable();
+            var parameters = new Dictionary<string, object>()
+                {
+                    { "name", name },
+                    { "email", email},
+                    { "username", username},
+                    { "password", password}
+                  //  { "ExampleOfNullParam", (object)DBNull.Value }
+                };
+
+            DatabaseHelper dh = new DatabaseHelper(connStr);
+
+            dt = dh.GetData(SP, Type, parameters);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                return true;
+            }
+            else { return false; }
         }
     }
 }
-
-//SqlConnection connection = new SqlConnection(connStr);
-//SqlCommand cmd = connection.CreateCommand();
-
-//string query = "Select * from Credential where username = @user";
-//cmd.CommandText = query;
-
-//cmd.Parameters.AddWithValue("@user", username);
-//connection.Open();
-
-//SqlDataReader reader = cmd.ExecuteReader();
-//DataTable dt = new DataTable();
-
-//dt.Load(reader);
-
-//if (dt != null && dt.Rows.Count > 0)
-//{
-//    if (dt.Rows[0]["Username"].ToString() == username && dt.Rows[0]["Password"].ToString() == password)
-//    {
-//        return true;
-//    }
-//    else
-//    { return false; }
-//}
-//else { return false; }
