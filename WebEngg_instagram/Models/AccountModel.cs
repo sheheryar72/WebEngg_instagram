@@ -127,5 +127,25 @@ namespace WebEngg_instagram.Models
             else { return false; }
         }
 
+        public bool ChangeProfile(string Address , string User)
+        {
+            string query = "UPDATE User_Info set Profile_Pic = @address where username = @user";
+            string Type = "TEXT";
+            DataTable dt = new DataTable();
+            var parameters = new Dictionary<string, object>()
+                {
+                    { "@address",  Address},
+                    { "@user",  User}
+                  //  { "ExampleOfNullParam", (object)DBNull.Value }
+                };
+            DatabaseHelper DH = new DatabaseHelper(connStr);
+            if ( DH.UpdateOrDelete(query, Type, parameters)>0)
+            {
+                return true;
+            }
+            return false;
+            
+        }
+
     }
 }

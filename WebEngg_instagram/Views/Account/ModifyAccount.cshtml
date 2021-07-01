@@ -61,11 +61,24 @@
     <script type='text/javascript'></script>
 </head>
 <body oncontextmenu='return false' class='snippet-body'>
+    <!--<form action="/Account/ProfilePictureOpenFileDialog" method="post">
+        <input type="file" id="Picture" name="Picture" style="visibility: hidden; width: 1px; height: 1px" multiple onchange="this.form.submit();" />-->
+    @*<input type="submit" value="OK" hidden />*@
+    <!--</form>-->
+
+    @using (Html.BeginForm("ProfilePictureOpenFileDialog", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="Picture" id="file" onchange="document.getElementById('ff').click();" hidden /><br><br>
+        <input type="submit" id="ff" hidden/>
+
+        <br><br>
+        @ViewBag.Message
+    }
     @*<h1 style="font-family:'Segoe Script'; color:white; margin-left:20px; font-size:30px">Instagram</h1>*@
     <div class="container rounded bg-dimgray mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src=@ViewData["prof"].ToString()><a href="#" style="color:dodgerblue">Change Profile</a><span class="font-weight-bold" style="color:white">@ViewData["name"]</span><span style="color:white;">@ViewData["email"]</span><span> </span></div>
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src=@ViewData["prof"].ToString()><a href="" onclick="document.getElementById('file').click(); return false" style="color:dodgerblue">Change Profile</a><span class="font-weight-bold" style="color:white">@ViewData["name"]</span><span style="color:white;">@ViewData["email"]</span><span> </span></div>
             </div>
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
@@ -77,15 +90,16 @@
                     @* <div class="col-md-12"><label class="labels"></label><input type="text" class="form-control" value="" placeholder="surname"></div>*@
                     <!--</div>-->
                     <form action="/Account/ModifyProfile" method="post">
+                        <!--<p></p>-->
                         <div class="row mt-3" font-color:white>
                             <div class="col-md-12"><label class="labels" style="color:white">Name</label><input name="name" type="text" class="form-control" placeholder="Enter Your Name Here" value="@ViewData["name"]"></div>
                             <div class="col-md-12"><label class="labels" style="color:white">Bio</label><input name="bio" type="text" class="form-control" placeholder="Enter Your Bio Here" value="@ViewData["bio"]"></div>
-                            <div class="col-md-12"><label class="labels"style="color:white">Phone</label><input name="phone" type="text" class="form-control" placeholder="Enter Your Phone Here" value="@ViewData["phone"]"></div>
-                            <div class="col-md-12"><label class="labels"style="color:white">Email Address</label><input name="email" type="text" class="form-control" placeholder="Enter Your Email Address here" value="@ViewData["email"]"></div>
-                            <div class="col-md-12"><label class="labels"style="color:white">City</label><input name="city" type="text" class="form-control" placeholder="Enter Your City Here" value="@ViewData["city"]"></div>
-                            <div class="col-md-12"><label class="labels"style="color:white">Country</label><input name="country" type="text" class="form-control" placeholder="Enter Your Country Here" value="@ViewData["country"]"></div>
-                            <div class="col-md-12"><label class="labels"style="color:white">Gender</label><input name="gender" type="text" class="form-control" placeholder="Enter Your Gender Here" value="@ViewData["gender"]"></div>
-                            <div class="col-md-12"><label class="labels"style="color:white">BirthDay</label><input name="dob" type="text" class="form-control" placeholder="Enter Your BirthDay Here" value="@ViewData["dob"]"></div>
+                            <div class="col-md-12"><label class="labels" style="color:white">Phone</label><input name="phone" type="text" class="form-control" placeholder="Enter Your Phone Here" value="@ViewData["phone"]"></div>
+                            <div class="col-md-12"><label class="labels" style="color:white">Email Address</label><input name="email" type="text" class="form-control" placeholder="Enter Your Email Address here" value="@ViewData["email"]"></div>
+                            <div class="col-md-12"><label class="labels" style="color:white">City</label><input name="city" type="text" class="form-control" placeholder="Enter Your City Here" value="@ViewData["city"]"></div>
+                            <div class="col-md-12"><label class="labels" style="color:white">Country</label><input name="country" type="text" class="form-control" placeholder="Enter Your Country Here" value="@ViewData["country"]"></div>
+                            <div class="col-md-12"><label class="labels" style="color:white">Gender</label><input name="gender" type="text" class="form-control" placeholder="Enter Your Gender Here" value="@ViewData["gender"]"></div>
+                            <div class="col-md-12"><label class="labels" style="color:white">BirthDay</label><input name="dob" type="text" class="form-control" placeholder="Enter Your BirthDay Here" value="@ViewData["dob"]"></div>
                         </div>
                         <div class="mt-5 text-center"><button type="submit" class="btn btn-primary profile-button" style="color:white">Save Profile</button></div>
                     </form>
@@ -108,11 +122,11 @@
             <div class="col-md-4">
                 <div class="p-3 py-5">
                     <form action="/Account/ModifyCredentials" method="post">
-                        <div ><span style="color:white"><b style="font-size:20px">Credentials</b></span></div><br>
-                        <div class="col-md-12"><label class="labels"style="color:white">Username</label><input name="username" type="text" class="form-control" placeholder="Enter Username Here" required readonly value="@ViewData["username"]"><label style="color:white">Can't change username</labelstyle="color:white"></div> <br>
-                        <div class="col-md-12"><label class="labels"style="color:white">Confirm Password</label><input name="oldpassword" type="password" class="form-control" required placeholder="Enter Old Password Here" value=""></div>
-                        <div class="col-md-12"><label class="labels"style="color:white">New Password</label><input name="newpassword" type="password" class="form-control" required placeholder="Enter New Password Here" value=""></div>
-                        <div class="mt-5 text-center"><button type="submit" class="btn btn-primary profile-button"style="color:white">Save Credential</button></div>
+                        <div><span style="color:white"><b style="font-size:20px">Credentials</b></span></div><br>
+                        <div class="col-md-12"><label class="labels" style="color:white">Username</label><input name="username" type="text" class="form-control" placeholder="Enter Username Here" required readonly value="@ViewData["username"]"><label style="color:white">Can't change username</labelstyle="color:white"></div> <br>
+                        <div class="col-md-12"><label class="labels" style="color:white">Confirm Password</label><input name="oldpassword" type="password" class="form-control" required placeholder="Enter Old Password Here" value=""></div>
+                        <div class="col-md-12"><label class="labels" style="color:white">New Password</label><input name="newpassword" type="password" class="form-control" required placeholder="Enter New Password Here" value=""></div>
+                        <div class="mt-5 text-center"><button type="submit" class="btn btn-primary profile-button" style="color:white">Save Credential</button></div>
                     </form>
                 </div>
             </div>

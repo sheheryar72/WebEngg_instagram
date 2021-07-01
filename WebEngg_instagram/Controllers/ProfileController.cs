@@ -122,7 +122,6 @@ namespace WebEngg_instagram.Controllers
             TempData["picture"] = prof_addr;
             try
             {
-                //TODO: Sort out error of open page for new user.....and also for user who has not post anything
                 if (followers_list!=null)
                 {
                     TempData["follower"] = followers_list.Count;

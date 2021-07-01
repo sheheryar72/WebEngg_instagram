@@ -85,8 +85,38 @@ namespace WebEngg_instagram.Controllers
         {
             return Session["user"] != null;
         }
+        [HttpPost]
+        public ActionResult ProfilePictureOpenFileDialog(HttpPostedFileBase Picture)
+        {
+            //string ProfileAddress = Form.Get("Picture");
+            try
+            {
+                if (Picture.ContentLength > 0)
+                {
+                    string _FileName = System.IO.Path.GetFileName(Picture.FileName);
+                    string[] splits = new string[3];
+                    splits = _FileName.Split('.');
+                    string Folder = "~/Data/Instagram/" + Session["user"];
+                    string ProfilePath = Folder + "/" + Session["user"].ToString() + "." + splits[1];
+                    string _path = System.IO.Path.Combine(Server.MapPath(ProfilePath));
+                    bool exists = System.IO.Directory.Exists(Server.MapPath(Folder));
+                    if (!exists)
+                        System.IO.Directory.CreateDirectory(Server.MapPath(Folder));
+                    Picture.SaveAs(_path);
+                    AccountModel AM = new AccountModel();
+                    if(AM.ChangeProfile(ProfilePath.Replace("~",""), Session["user"].ToString()))
+                    { ViewBag.Message = "File Uploaded Successfully!!"; }
+                }
 
-
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                ViewBag.Message = "File Upload failed!!";
+                return View();
+            }
+            return RedirectToAction("Index");
+        }
 
         private void Profile_Data(string prof)
         {
