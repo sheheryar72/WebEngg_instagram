@@ -194,19 +194,16 @@ namespace WebEngg_instagram.Controllers
                 for (int i = 0; i < posts_list.Count; i++)
                 {
                     ViewData["post" + i.ToString()] = posts_list[i]; // show posts
-                }
-
-                if (No_of_likes != null)
-                {
-                    for (int i = 0; i < No_of_likes.Count; i++)
-                    { ViewData["likes" + i.ToString()] = No_of_likes[i]; }
-                }
-                if (No_of_comments != null)
-                {
-                    for (int i = 0; i < No_of_comments.Count; i++)
-                    {
+                    
+                    if (No_of_likes != null && i < No_of_likes.Count)
+                        ViewData["likes" + i.ToString()] = No_of_likes[i];
+                    else
+                        ViewData["likes" + i.ToString()] = 0;
+                    
+                    if (No_of_comments != null && i < No_of_comments.Count)
                         ViewData["comments" + i.ToString()] = No_of_comments[i];
-                    }
+                    else
+                        ViewData["comments" + i.ToString()] = 0;
                 }
             }
         }
