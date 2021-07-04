@@ -13,6 +13,10 @@ namespace WebEngg_instagram.Controllers
         // GET: Login
         public ActionResult Login()
         {
+            if(IsUserLoggedIn())
+            {
+                return RedirectToAction("MyProfile", "Profile");
+            }
             return View();
         }
 
@@ -63,5 +67,10 @@ namespace WebEngg_instagram.Controllers
             
             return RedirectToAction("Login");
         }
+        private bool IsUserLoggedIn()
+        {
+            return Session["user"] != null;
+        }
+
     }
 }

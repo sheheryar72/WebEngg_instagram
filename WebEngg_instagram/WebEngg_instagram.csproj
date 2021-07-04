@@ -136,12 +136,16 @@
     </Compile>
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\DatabaseHelper.cs" />
+    <Compile Include="Models\FeedsModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\ProfileModel.cs" />
-    <Compile Include="Models\SqlDataHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\ig-logo.png" />
+    <Content Include="Content\index.css" />
+    <Content Include="Content\JS\jquery-3.6.0.min.js" />
+    <Content Include="Content\JS\jquery-ui.min.js" />
     <Content Include="Content\styles.css" />
     <Content Include="Data\Instagram\damon\damon.jpg" />
     <Content Include="Data\Instagram\elena\elena.jpg" />
@@ -169,7 +173,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\" />
-    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -182,6 +185,8 @@
     <Content Include="Views\Profile\MyProfile.cshtml" />
     <Content Include="Views\Account\ModifyAccount.cshtml" />
     <Content Include="Views\API\Index.cshtml" />
+    <Content Include="Views\Home\Home.cshtml" />
+    <Content Include="Views\Profile\OthersProfile.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

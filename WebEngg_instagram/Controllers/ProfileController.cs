@@ -14,6 +14,7 @@ namespace WebEngg_instagram.Controllers
         private string name = "";
         private string bio = "";
         private string prof_addr = "";
+        string User;
 
         ArrayList followers_list = new ArrayList();
         ArrayList following_list = new ArrayList();
@@ -31,7 +32,7 @@ namespace WebEngg_instagram.Controllers
         public ActionResult Index()
         {
 
-            return RedirectToAction("YourProfile");
+            return RedirectToAction("MyProfile");
         }
 
         public ActionResult MyProfile()
@@ -45,10 +46,18 @@ namespace WebEngg_instagram.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        [HttpPost]
-        public ActionResult OtherUsers(string username)
+        [HttpGet]
+        public ActionResult OthersProfile(string username)
         {
             TempData["userprofile"] = username;
+            Session["userprofile"] = username;
+
+            User = username;
+            ProfileModel PM = new ProfileModel();
+            if (PM.IsUserFollowed(Session["user"].ToString(), username))
+                Session["IsFollowed"] = "Following";
+            else
+                Session["IsFollowed"] = "Follow";
             Profile_Data(username);
             return View();
         }
@@ -99,6 +108,32 @@ namespace WebEngg_instagram.Controllers
                
             }
             else { prof_addr = ""; name = ""; bio = ""; }
+        }
+        public void FUF()
+        {
+            ProfileModel PM = new ProfileModel();
+            //string Follower = User;
+            string Follower = Session["userprofile"].ToString();
+            string username = Session["user"].ToString();
+
+            if (Session["IsFollowed"].ToString() == "Following") //Delete
+            {
+                PM.UnFollow(username, Follower);
+            }
+            if (Session["IsFollowed"].ToString() == "Follow") //Insert
+            {
+                PM.Follow(username, Follower);
+            }
+        }
+        public ActionResult FollowUnFollow()
+        {
+            string user = Session["userprofile"].ToString();
+            FUF();
+
+
+            return RedirectToAction("OthersProfile", "Profile", new {username = user});
+
+
         }
 
         public ArrayList Data_Extractor(DataTable dt , string val)
@@ -159,10 +194,19 @@ namespace WebEngg_instagram.Controllers
                 for (int i = 0; i < posts_list.Count; i++)
                 {
                     ViewData["post" + i.ToString()] = posts_list[i]; // show posts
-                    if (i < No_of_likes.Count)
+                }
+
+                if (No_of_likes != null)
+                {
+                    for (int i = 0; i < No_of_likes.Count; i++)
                     { ViewData["likes" + i.ToString()] = No_of_likes[i]; }
-                    if (i < No_of_comments.Count)
-                    { ViewData["comments" + i.ToString()] = No_of_comments[i]; }
+                }
+                if (No_of_comments != null)
+                {
+                    for (int i = 0; i < No_of_comments.Count; i++)
+                    {
+                        ViewData["comments" + i.ToString()] = No_of_comments[i];
+                    }
                 }
             }
         }

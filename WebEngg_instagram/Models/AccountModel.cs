@@ -44,8 +44,8 @@ namespace WebEngg_instagram.Models
                 string query = "update Credential set Password = @password where Username = @user";
                 var parameters = new Dictionary<string, object>()
                 {
-                    { "@password", newpassword },
-                    { "@user", config },
+                    { "password", newpassword },
+                    { "user", config },
                     { "ExampleOfNullParam", (object)DBNull.Value }
                 };
 
@@ -110,9 +110,9 @@ namespace WebEngg_instagram.Models
             int uncount = 0;
             string query = "select username from Credential";
             DataTable dt = new DataTable();
-            SqlDataHelper sdh = new SqlDataHelper();
-
-            dt = sdh.Select(query);
+            DatabaseHelper sdh = new DatabaseHelper(connStr);
+            var parameters = new Dictionary<string, object>();
+            dt = sdh.GetData(query,"Text",parameters);
             if (dt.Rows.Count > 0)
             {
                 for (int i = 0; i < dt.Rows.Count; i++)
@@ -130,6 +130,7 @@ namespace WebEngg_instagram.Models
         public bool ChangeProfile(string Address , string User)
         {
             string query = "UPDATE User_Info set Profile_Pic = @address where username = @user";
+
             string Type = "TEXT";
             DataTable dt = new DataTable();
             var parameters = new Dictionary<string, object>()

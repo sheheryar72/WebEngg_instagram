@@ -107,7 +107,7 @@ namespace WebEngg_instagram.Models
             return retVal;
         }
 
-        public object Insert(string query, string types, Dictionary<string, object> parameters)
+        public int Insert(string query, string types, Dictionary<string, object> parameters)
         {
             if (string.IsNullOrEmpty(query))
                 throw new ArgumentNullException();
@@ -144,7 +144,7 @@ namespace WebEngg_instagram.Models
                 }
             }
 
-            return retVal;
+            return 1;
         }
 
         public int UpdateOrDelete(string query, string types, Dictionary<string, object> parameters)
