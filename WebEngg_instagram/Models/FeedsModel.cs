@@ -74,5 +74,37 @@ namespace WebEngg_instagram.Models
             return dt;
         }
 
+        public DataTable PostsOfFollowers(string Username)
+        {
+         //  select p.Post_ID, p.Username,p.post_Date, p.post_Time, p.Text, p.Source, p.Source_Type, u.Profile_Pic,(select count(*) from[likes] where Post_ID = p.Post_ID) as likes_count,
+	     //  (select count(*) from[comments] where Post_ID = p.Post_ID) as comments_count from[post] p join[User_Info] u on p.Username = u.Username
+         //  where p.Username in (select Username from Followers where Follower_ID = @user) 
+            DataTable dt = new DataTable();
+            string PS = "PostData";
+            string Type = "STOREDPROCEDURE";
+            DatabaseHelper DH = new DatabaseHelper(connStr);
+            var parameters = new Dictionary<string, object>()
+            {
+                {"user",Username}
+            };
+            dt = DH.GetData(PS, Type, parameters);
+            return dt;
+        }
+
+        public DataTable GetComments(string Username)
+        {
+            //Select Post_ID,Username,Comment from Comments where Post_ID in ( select Post_ID from post where Username in (select Username from Followers where Follower_ID=@user))
+            DataTable dt = new DataTable();
+            string PS = "CommentData";
+            string Type = "STOREDPROCEDURE";
+            DatabaseHelper DH = new DatabaseHelper(connStr);
+            var parameters = new Dictionary<string, object>()
+            {
+                {"user",Username}
+            };
+            dt = DH.GetData(PS, Type, parameters);
+            return dt;
+        }
+
     }
 }

@@ -14,7 +14,6 @@ namespace WebEngg_instagram.Controllers
         private string name = "";
         private string bio = "";
         private string prof_addr = "";
-        string User;
 
         ArrayList followers_list = new ArrayList();
         ArrayList following_list = new ArrayList();
@@ -34,7 +33,6 @@ namespace WebEngg_instagram.Controllers
 
             return RedirectToAction("MyProfile");
         }
-
         public ActionResult MyProfile()
         {
             if (IsUserLoggedIn())
@@ -45,23 +43,28 @@ namespace WebEngg_instagram.Controllers
             }
             return RedirectToAction("Login", "User");
         }
-
         [HttpGet]
         public ActionResult OthersProfile(string username)
         {
             TempData["userprofile"] = username;
             Session["userprofile"] = username;
-
-            User = username;
-            ProfileModel PM = new ProfileModel();
-            if (PM.IsUserFollowed(Session["user"].ToString(), username))
-                Session["IsFollowed"] = "Following";
+            if(IsUserLoggedIn())
+            {
+                if (username == Session["user"].ToString())
+                {
+                    return RedirectToAction("MyProfile");
+                }
+                ProfileModel PM = new ProfileModel();
+                if (PM.IsUserFollowed(Session["user"].ToString(), username))
+                    Session["IsFollowed"] = "Following";
+                else
+                    Session["IsFollowed"] = "Follow";
+                Profile_Data(username);
+                return View();
+            }
             else
-                Session["IsFollowed"] = "Follow";
-            Profile_Data(username);
-            return View();
+                return RedirectToAction("Login", "User");
         }
-
         public ActionResult Signout()
         {
             if(IsUserLoggedIn())
@@ -94,10 +97,9 @@ namespace WebEngg_instagram.Controllers
 
             No_of_likes = Data_Extractor(dt[6], "No_of_Likes"); // Comments
             No_of_comments = Data_Extractor(dt[7], "No_of_Comments"); // Comments
-
+            FollowersAndFollowingsData();
             HTML_Data_Print(name, prof_addr, bio);
         }
-
         public void ProfileData(DataTable dt)
         {
             if (dt != null && dt.Rows.Count > 0) // 1: User
@@ -135,7 +137,6 @@ namespace WebEngg_instagram.Controllers
 
 
         }
-
         public ArrayList Data_Extractor(DataTable dt , string val)
         {
             ArrayList temp = new ArrayList();
@@ -149,7 +150,6 @@ namespace WebEngg_instagram.Controllers
             }
             else { temp = null; return temp; }
         }
-
         public void HTML_Data_Print(string name , string prof_address , string bio)
         {
             TempData["name"] = name;
@@ -207,11 +207,33 @@ namespace WebEngg_instagram.Controllers
                 }
             }
         }
-
-
         private bool IsUserLoggedIn()
         {
             return Session["user"] != null;
+        }
+
+        public void FollowersAndFollowingsData()
+        {
+            int i = 0 , j = 0;
+            if(followers_list != null)
+            {
+                foreach (string follower in followers_list)
+                {
+                    ViewData["Follower" + i.ToString()] = follower;
+                    i++;
+                }
+            }
+            ViewData["FollowerCount"] = i;
+
+            if (following_list != null)
+            {
+                foreach (string following in following_list)
+                {
+                    ViewData["Following" + j.ToString()] = following;
+                    j++;
+                }
+            }
+            ViewData["FollowingCount"] = j;
         }
     }
 }

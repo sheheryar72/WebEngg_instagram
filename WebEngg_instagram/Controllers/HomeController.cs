@@ -44,10 +44,11 @@ namespace WebEngg_instagram.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        public ActionResult Home()
+        public ActionResult Feeds()
         {
-            if (/*IsUserLoggedIn()*/true)
+            if (IsUserLoggedIn())
             {
+                PostDataToViewData(Session["user"].ToString());
                 return View();
             }
             return RedirectToAction("Login", "User");
@@ -138,6 +139,37 @@ namespace WebEngg_instagram.Controllers
             return Session["user"] != null;
         }
 
+        public void PostDataToViewData(string Username)
+        {
+            DataTable dtPost = new DataTable();
+            DataTable dtComments = new DataTable();
+            FeedsModel FM = new FeedsModel();
+            dtPost = FM.PostsOfFollowers(Username);
+            dtComments = FM.GetComments(Username);
 
+            for (int i = 0; i < dtPost.Rows.Count; i++)
+            {
+                ViewData["Post_ID" + "Post" + i.ToString()] = dtPost.Rows[i]["Post_ID"].ToString();
+                ViewData["Username" + "Post" + i.ToString()] = dtPost.Rows[i]["Username"].ToString();
+                ViewData["Post_Date" + "Post" + i.ToString()] = dtPost.Rows[i]["Post_Date"].ToString();
+                ViewData["Post_Time" + "Post" + i.ToString()] = dtPost.Rows[i]["Post_Time"].ToString();
+                ViewData["Text" + "Post" + i.ToString()] = dtPost.Rows[i]["Text"].ToString();
+                ViewData["Source" + "Post" + i.ToString()] = dtPost.Rows[i]["Source"].ToString();
+                ViewData["Source_Type" + "Post" + i.ToString()] = dtPost.Rows[i]["Source_Type"].ToString();
+                ViewData["likes_count" + "Post" + i.ToString()] = dtPost.Rows[i]["likes_count"].ToString();
+                ViewData["comments_count" + "Post" + i.ToString()] = dtPost.Rows[i]["comments_count"].ToString();
+                ViewData["Profile_Pic" + "Post" + i.ToString()] = dtPost.Rows[i]["Profile_Pic"].ToString();
+                ViewData["Post_count"] = i;
+            }
+
+            for (int i = 0; i < dtComments.Rows.Count; i++)
+            {
+                ViewData["Post_ID" + "comment" + i.ToString()] = dtComments.Rows[i]["Post_ID"].ToString();
+                ViewData["Username" + "comment" + i.ToString()] = dtComments.Rows[i]["Username"].ToString();
+                ViewData["comment" + "comment" + i.ToString()] = dtComments.Rows[i]["comment"].ToString();
+                ViewData["comment_count"] = i;
+            }
+
+        }
     }
 }
