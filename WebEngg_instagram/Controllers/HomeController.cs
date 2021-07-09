@@ -169,6 +169,7 @@ namespace WebEngg_instagram.Controllers
                 ViewData["comment" + "comment" + i.ToString()] = dtComments.Rows[i]["comment"].ToString();
                 ViewData["comment_count"] = i;
             }
+            ViewData["ProfilePicss"] = FM.GetProfile(Session["user"].ToString());
 
         }
     }

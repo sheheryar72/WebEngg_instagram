@@ -1,6 +1,6 @@
 ﻿@{
     Layout = null;
-
+    string src = ViewData["ProfilePicss"].ToString();
 }
 
 <!DOCTYPE html>
@@ -19,12 +19,100 @@
 
     @*<script src="/Content/JS/jquery-3.6.0.min.js"></script>*@
     @*<script src="/Content/JS/jquery-ui.min.js"></script>*@
+    @*<script src="~/Scripts/jquery.signalR-2.4.2.js"></script>*@
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
     <link rel="stylesheet" href="~/Content/index.css">
 
     <title>Document</title>
+    <script src="/signalr/hubs"></script>
+    <style>
+
+
+
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: #2980B9;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #000000;
+            min-width: 210px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: white;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                border:1px solid white;
+            }
+
+        #img123 {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            fill:#ffffff;
+        }
+
+        #Ntf_btn {
+            margin-left: 10px;
+            background-color: #2980B9;
+            color: white;
+            border-radius: 12%;
+        }
+
+        .dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
 </head>
 
 <body style="background-color:black;">
+    <script>
+    window.addEventListener('load', function () {
+        $.connection.hub.start().done(onHubStart).fail(failed);
+
+        function onHubStart() {
+            commentshub.client.newMessage = new function (Post_ID, Username, Comment) {
+                alert('new message function called');
+                init();
+                //console.log({ Post_ID, Username, Comment });
+                console.log("Hub Start");
+            }
+             function commentidgrabber(commentgrab) {
+                var Post_ID = commentgrab.replace('comment', '')
+                var commenttextss = getElementById('commenttext' + Post_ID).value;
+                save_comment(Post_ID, commenttextss);
+            }
+            function save_comment(postid, comment) {
+                const CurrentUsername = @Session["user"].ToString();
+                const CurrentPostID = postid;
+                const CurrentComment = comment;
+                commentshub.hub.server.comment(CurrentPostID, CurrentUsername, CurrentComment);
+            }
+        }
+        function failed() {
+            console.log("failed");
+        }
+    }, 5000);
+    </script>
+
+
+
     @using (Html.BeginForm("AddPost", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <input type="file" name="PostedFile" id="file" hidden />
@@ -32,7 +120,15 @@
         <input type="submit" onclick="TextValueUpdate()" id="ff" hidden />
     }
 
+
+
+
+
+
     <script>
+
+
+
         //window.addEventListener('load', function () {
         //    $('#searchs').autocomplete({
         //        source: function (request, response) {
@@ -88,7 +184,7 @@
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content"style="background-color:black;color:white">
+            <div class="modal-content" style="background-color:black;color:white">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalCenterTitle">Add Post</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:white">
@@ -131,14 +227,14 @@
                     </a>
                     <div>
                         <form class="form-inline my-2 my-lg-0" method="get" action="/Profile/OthersProfile">
-                            <input class="form-control mr-sm-2" id="searchs" name="username" type="search" placeholder="Search" aria-label="Search" style="background-color: black; color:white";
-">
+                            <input class="form-control mr-sm-2" id="searchs" name="username" type="search" placeholder="Search" aria-label="Search" style="background-color: black; color:white" ;
+                                   ">
                         </form>
                     </div>
                     <div class="d-flex flex-row">
                         <ul class="list-inline m-0">
                             <li class="list-inline-item">
-                                <a href="#" class="link-menu">
+                                <a href="/Home/Feeds" class="link-menu">
                                     <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-house-door-fill"
                                          fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6.5 10.995V14.5a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5V11c0-.25-.25-.5-.5-.5H7c-.25 0-.5.25-.5.495z" />
@@ -177,12 +273,40 @@
                                 </a>
                             </li>
                             <li class="list-inline-item ml-2 align-middle">
-                                <a href="#" class="link-menu">
-                                    <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border topbar-profile-photo">
-                                        <img src="~/Data/Instagram/fallen12/fallen.jpg" alt="..."
-                                             style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
+                                <div class="dropdown">
+                                    <a href="javascript:myFunction()" class="link-menu" onclick="myFunction()">
+                                        <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border topbar-profile-photo">
+                                            <img src=@src alt="..."
+                                                 style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
+                                        </div>
+                                    </a>
+                                    <div id="myDropdown" class="dropdown-content">
+                                        <a href="/Profile/MyProfile"><svg id="img123" height="512pt" viewBox="0 0 512 512" width="512pt" xmlns="http://www.w3.org/2000/svg"><path d="m437.019531 74.980469c-48.351562-48.351563-112.640625-74.980469-181.019531-74.980469-68.382812 0-132.667969 26.628906-181.019531 74.980469-48.351563 48.351562-74.980469 112.636719-74.980469 181.019531 0 68.378906 26.628906 132.667969 74.980469 181.019531 48.351562 48.351563 112.636719 74.980469 181.019531 74.980469 68.378906 0 132.667969-26.628906 181.019531-74.980469 48.351563-48.351562 74.980469-112.640625 74.980469-181.019531 0-68.382812-26.628906-132.667969-74.980469-181.019531zm-308.679687 367.40625c10.707031-61.648438 64.128906-107.121094 127.660156-107.121094 63.535156 0 116.953125 45.472656 127.660156 107.121094-36.347656 24.972656-80.324218 39.613281-127.660156 39.613281s-91.3125-14.640625-127.660156-39.613281zm46.261718-218.519531c0-44.886719 36.515626-81.398438 81.398438-81.398438s81.398438 36.515625 81.398438 81.398438c0 44.882812-36.515626 81.398437-81.398438 81.398437s-81.398438-36.515625-81.398438-81.398437zm235.042969 197.710937c-8.074219-28.699219-24.109375-54.738281-46.585937-75.078125-13.789063-12.480469-29.484375-22.328125-46.359375-29.269531 30.5-19.894531 50.703125-54.3125 50.703125-93.363281 0-61.425782-49.976563-111.398438-111.402344-111.398438s-111.398438 49.972656-111.398438 111.398438c0 39.050781 20.203126 73.46875 50.699219 93.363281-16.871093 6.941406-32.570312 16.785156-46.359375 29.265625-22.472656 20.339844-38.511718 46.378906-46.585937 75.078125-44.472657-41.300781-72.355469-100.238281-72.355469-165.574219 0-124.617188 101.382812-226 226-226s226 101.382812 226 226c0 65.339844-27.882812 124.277344-72.355469 165.578125zm0 0" /></svg>Profile</a>
+                                        <a href="/Account/ModifyAccount"><svg id="img123" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg"><path d="m272.066 512h-32.133c-25.989 0-47.134-21.144-47.134-47.133v-10.871c-11.049-3.53-21.784-7.986-32.097-13.323l-7.704 7.704c-18.659 18.682-48.548 18.134-66.665-.007l-22.711-22.71c-18.149-18.129-18.671-48.008.006-66.665l7.698-7.698c-5.337-10.313-9.792-21.046-13.323-32.097h-10.87c-25.988 0-47.133-21.144-47.133-47.133v-32.134c0-25.989 21.145-47.133 47.134-47.133h10.87c3.531-11.05 7.986-21.784 13.323-32.097l-7.704-7.703c-18.666-18.646-18.151-48.528.006-66.665l22.713-22.712c18.159-18.184 48.041-18.638 66.664.006l7.697 7.697c10.313-5.336 21.048-9.792 32.097-13.323v-10.87c0-25.989 21.144-47.133 47.134-47.133h32.133c25.989 0 47.133 21.144 47.133 47.133v10.871c11.049 3.53 21.784 7.986 32.097 13.323l7.704-7.704c18.659-18.682 48.548-18.134 66.665.007l22.711 22.71c18.149 18.129 18.671 48.008-.006 66.665l-7.698 7.698c5.337 10.313 9.792 21.046 13.323 32.097h10.87c25.989 0 47.134 21.144 47.134 47.133v32.134c0 25.989-21.145 47.133-47.134 47.133h-10.87c-3.531 11.05-7.986 21.784-13.323 32.097l7.704 7.704c18.666 18.646 18.151 48.528-.006 66.665l-22.713 22.712c-18.159 18.184-48.041 18.638-66.664-.006l-7.697-7.697c-10.313 5.336-21.048 9.792-32.097 13.323v10.871c0 25.987-21.144 47.131-47.134 47.131zm-106.349-102.83c14.327 8.473 29.747 14.874 45.831 19.025 6.624 1.709 11.252 7.683 11.252 14.524v22.148c0 9.447 7.687 17.133 17.134 17.133h32.133c9.447 0 17.134-7.686 17.134-17.133v-22.148c0-6.841 4.628-12.815 11.252-14.524 16.084-4.151 31.504-10.552 45.831-19.025 5.895-3.486 13.4-2.538 18.243 2.305l15.688 15.689c6.764 6.772 17.626 6.615 24.224.007l22.727-22.726c6.582-6.574 6.802-17.438.006-24.225l-15.695-15.695c-4.842-4.842-5.79-12.348-2.305-18.242 8.473-14.326 14.873-29.746 19.024-45.831 1.71-6.624 7.684-11.251 14.524-11.251h22.147c9.447 0 17.134-7.686 17.134-17.133v-32.134c0-9.447-7.687-17.133-17.134-17.133h-22.147c-6.841 0-12.814-4.628-14.524-11.251-4.151-16.085-10.552-31.505-19.024-45.831-3.485-5.894-2.537-13.4 2.305-18.242l15.689-15.689c6.782-6.774 6.605-17.634.006-24.225l-22.725-22.725c-6.587-6.596-17.451-6.789-24.225-.006l-15.694 15.695c-4.842 4.843-12.35 5.791-18.243 2.305-14.327-8.473-29.747-14.874-45.831-19.025-6.624-1.709-11.252-7.683-11.252-14.524v-22.15c0-9.447-7.687-17.133-17.134-17.133h-32.133c-9.447 0-17.134 7.686-17.134 17.133v22.148c0 6.841-4.628 12.815-11.252 14.524-16.084 4.151-31.504 10.552-45.831 19.025-5.896 3.485-13.401 2.537-18.243-2.305l-15.688-15.689c-6.764-6.772-17.627-6.615-24.224-.007l-22.727 22.726c-6.582 6.574-6.802 17.437-.006 24.225l15.695 15.695c4.842 4.842 5.79 12.348 2.305 18.242-8.473 14.326-14.873 29.746-19.024 45.831-1.71 6.624-7.684 11.251-14.524 11.251h-22.148c-9.447.001-17.134 7.687-17.134 17.134v32.134c0 9.447 7.687 17.133 17.134 17.133h22.147c6.841 0 12.814 4.628 14.524 11.251 4.151 16.085 10.552 31.505 19.024 45.831 3.485 5.894 2.537 13.4-2.305 18.242l-15.689 15.689c-6.782 6.774-6.605 17.634-.006 24.225l22.725 22.725c6.587 6.596 17.451 6.789 24.225.006l15.694-15.695c3.568-3.567 10.991-6.594 18.244-2.304z" /><path d="m256 367.4c-61.427 0-111.4-49.974-111.4-111.4s49.973-111.4 111.4-111.4 111.4 49.974 111.4 111.4-49.973 111.4-111.4 111.4zm0-192.8c-44.885 0-81.4 36.516-81.4 81.4s36.516 81.4 81.4 81.4 81.4-36.516 81.4-81.4-36.515-81.4-81.4-81.4z" /></svg>Settings</a>
+                                        <a href="/Profile/Signout"><svg id="img123" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg"></svg>Logout</a>
                                     </div>
-                                </a>
+                                    <script>
+                                        /* When the user clicks on the button,
+                                        toggle between hiding and showing the dropdown content */
+                                        function myFunction() {
+                                            document.getElementById("myDropdown").classList.toggle("show");
+                                        }
+
+                                        // Close the dropdown if the user clicks outside of it
+                                        window.onclick = function (event) {
+                                            if (!event.target.matches('.dropbtn')) {
+                                                var dropdowns = document.getElementsByClassName("dropdown-content");
+                                                var i;
+                                                for (i = 0; i < dropdowns.length; i++) {
+                                                    var openDropdown = dropdowns[i];
+                                                    if (openDropdown.classList.contains('show')) {
+                                                        openDropdown.classList.remove('show');
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </script>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -231,118 +355,132 @@
                         @for (int i = 0; i < Convert.ToInt32(ViewData["Post_count"]); i++)
                         {
 
-                             <div class="d-flex flex-column mt-4 mb-4">
+                            <div class="d-flex flex-column mt-4 mb-4">
 
-                            <div class="card">
-                                <div class="card-header p-3" style="background-color:black;">
-                                    <div class="d-flex flex-row align-items-center">
-                                        <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border border-danger post-profile-photo mr-3">
-                                            <img src=@ViewData["Profile_Pic" + "Post" + i.ToString()] alt="..."
-                                                 style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
-                                        </div>
-                                        <span class="font-weight-bold">@ViewData["Username" + "Post" + i.ToString()]</span>
-                                    </div>
-                                </div>
-                                <div class="card-body p-0" style="background-color:black;">
-                                    <div class="embed-responsive embed-responsive-1by1">
-                                        @if (ViewData["Source_Type" + "Post" + i.ToString()].ToString() == "Image")
-                                        {
-                                            <img class="embed-responsive-item" src=@ViewData["Source" + "Post" + i.ToString()] />
-                                        }
-                                        else if (ViewData["Source_Type" + "Post" + i.ToString()].ToString() == "Video")
-                                        {
-                                            <video class="embed-responsive-item" src=@ViewData["Source" + "Post" + i.ToString()] />
-                                        }
-                                    </div>
-
-                                    <div class="d-flex flex-row justify-content-between pl-3 pr-3 pt-3 pb-1">
-                                        <ul class="list-inline d-flex flex-row align-items-center m-0">
-                                            <li class="list-inline-item">
-                                                <button class="btn p-0">
-                                                    <svg width="1.6em" height="1.6em" viewBox="0 0 16 16"
-                                                         class="bi bi-heart" fill="#ffffff"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd"
-                                                              d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-                                                    </svg>
-                                                </button>
-                                            </li>
-                                            <li class="list-inline-item ml-2">
-                                                <button class="btn p-0">
-                                                    <svg width="1.6em" height="1.6em" viewBox="0 0 16 16"
-                                                         class="bi bi-chat" fill="#ffffff"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd"
-                                                              d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z" />
-                                                    </svg>
-                                                </button>
-                                            </li>
-                                            <li class="list-inline-item ml-2">
-                                                <button class="btn p-0">
-                                                    <svg width="1.6em" height="1.6em" viewBox="0 0 16 16"
-                                                         class="bi bi-share" fill="#ffffff"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd"
-                                                              d="M11.724 3.947l-7 3.5-.448-.894 7-3.5.448.894zm-.448 9l-7-3.5.448-.894 7 3.5-.448.894z" />
-                                                        <path fill-rule="evenodd"
-                                                              d="M13.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm0 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm-11-6.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
-                                                    </svg>
-                                                </button>
-                                            </li>
-                                        </ul>
-                                        <div>
-                                            <button class="btn p-0">
-                                                <svg width="1.6em" height="1.6em" viewBox="0 0 16 16" class="bi bi-hdd"
-                                                     fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                          d="M14 9H2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1zM2 8a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H2z" />
-                                                    <path d="M5 10.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
-                                                    <path fill-rule="evenodd"
-                                                          d="M4.094 4a.5.5 0 0 0-.44.26l-2.47 4.532A1.5 1.5 0 0 0 1 9.51v.99H0v-.99c0-.418.105-.83.305-1.197l2.472-4.531A1.5 1.5 0 0 1 4.094 3h7.812a1.5 1.5 0 0 1 1.317.782l2.472 4.53c.2.368.305.78.305 1.198v.99h-1v-.99a1.5 1.5 0 0 0-.183-.718L12.345 4.26a.5.5 0 0 0-.439-.26H4.094z" />
-                                                </svg>
-                                            </button>
+                                <div class="card">
+                                    <div class="card-header p-3" style="background-color:black;">
+                                        <div class="d-flex flex-row align-items-center">
+                                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border border-danger post-profile-photo mr-3">
+                                                <img src=@ViewData["Profile_Pic" + "Post" + i.ToString()] alt="..."
+                                                     style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
+                                            </div>
+                                            <span class="font-weight-bold">@ViewData["Username" + "Post" + i.ToString()]</span>
                                         </div>
                                     </div>
-
-                                    <div class="pl-3 pr-3 pb-2">
-                                        <strong class="d-block">@ViewData["likes_count" + "Post" + i.ToString()] likes</strong>
-                                        <strong class="d-block">@ViewData["Username" + "Post" + i.ToString()]</strong>
-                                        <p class="d-block mb-1">@ViewData["Text" + "Post" + i.ToString()]</p>
-                                        <button class="btn p-0">
-                                            <span class="text-muted">View all @ViewData["comments_count" + "Post" + i.ToString()] comments</span>
-                                        </button>
-                                        @for (int j = 0; j < Convert.ToInt32(@ViewData["comments_count" + "Post" + i.ToString()]); j++)
-                                        {
-                                            for (int k = 0; k < Convert.ToInt32(ViewData["comment_count"]); k++)
+                                    <div class="card-body p-0" style="background-color:black;">
+                                        <div class="embed-responsive embed-responsive-1by1">
+                                            @if (ViewData["Source_Type" + "Post" + i.ToString()].ToString() == "Image")
                                             {
-                                                if (ViewData["Post_ID" + "comment" + k.ToString()] == ViewData["Post_ID" + "Post" + i.ToString()])
-                                                {
-                                                    <div>
-                                                        <div>
-                                                            <strong class="d-block">@ViewData["Username" + "comment" + k.ToString()]</strong>
-                                                            <span>@ViewData["comment" + "comment" + k.ToString()]</span>
-                                                        </div>
-                                                    </div>
+                                                <img class="embed-responsive-item" src=@ViewData["Source" + "Post" + i.ToString()] />
+                                            }
+                                            else if (ViewData["Source_Type" + "Post" + i.ToString()].ToString() == "Video")
+                                            {
+                                                <video class="embed-responsive-item" src=@ViewData["Source" + "Post" + i.ToString()] />
+                                            }
+                                        </div>
+
+                                        <div class="d-flex flex-row justify-content-between pl-3 pr-3 pt-3 pb-1">
+                                            <ul class="list-inline d-flex flex-row align-items-center m-0">
+                                                <li class="list-inline-item">
+                                                    <button class="btn p-0">
+                                                        <svg width="1.6em" height="1.6em" viewBox="0 0 16 16"
+                                                             class="bi bi-heart" fill="#ffffff"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                                                        </svg>
+                                                    </button>
+                                                </li>
+                                                <li class="list-inline-item ml-2">
+                                                    <button class="btn p-0">
+                                                        <svg width="1.6em" height="1.6em" viewBox="0 0 16 16"
+                                                             class="bi bi-chat" fill="#ffffff"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z" />
+                                                        </svg>
+                                                    </button>
+                                                </li>
+                                                <li class="list-inline-item ml-2">
+                                                    <button class="btn p-0">
+                                                        <svg width="1.6em" height="1.6em" viewBox="0 0 16 16"
+                                                             class="bi bi-share" fill="#ffffff"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M11.724 3.947l-7 3.5-.448-.894 7-3.5.448.894zm-.448 9l-7-3.5.448-.894 7 3.5-.448.894z" />
+                                                            <path fill-rule="evenodd"
+                                                                  d="M13.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm0 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm-11-6.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+                                                        </svg>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                            <div>
+                                                <button class="btn p-0">
+                                                    <svg width="1.6em" height="1.6em" viewBox="0 0 16 16" class="bi bi-hdd"
+                                                         fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M14 9H2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1zM2 8a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H2z" />
+                                                        <path d="M5 10.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
+                                                        <path fill-rule="evenodd"
+                                                              d="M4.094 4a.5.5 0 0 0-.44.26l-2.47 4.532A1.5 1.5 0 0 0 1 9.51v.99H0v-.99c0-.418.105-.83.305-1.197l2.472-4.531A1.5 1.5 0 0 1 4.094 3h7.812a1.5 1.5 0 0 1 1.317.782l2.472 4.53c.2.368.305.78.305 1.198v.99h-1v-.99a1.5 1.5 0 0 0-.183-.718L12.345 4.26a.5.5 0 0 0-.439-.26H4.094z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            function toggleComments(elementss) {
+                                                var value = elementss.replace('commentbutton', '');
+                                                var val1 = 'ShowComments' + value;
+                                                var myComments = document.getElementById(val1);
+                                                var displaySetting = myComments.style.display;
+                                                var commentButton = document.getElementById(elementss);
+                                                if (displaySetting == 'block') {
+                                                    myComments.style.display = 'none';
+                                                    commentButton.innerHTML = 'Show all comments';
+                                                }
+                                                else {
+                                                    myComments.style.display = 'block';
+                                                    commentButton.innerHTML = 'Hide all comments';
                                                 }
                                             }
-                                        }
+                                        </script>
+                                        <div class="pl-3 pr-3 pb-2">
+                                            <strong class="d-block">@ViewData["likes_count" + "Post" + i.ToString()] likes</strong>
+                                            <strong class="d-block">@ViewData["Username" + "Post" + i.ToString()]</strong>
+                                            <p class="d-block mb-1">@ViewData["Text" + "Post" + i.ToString()]</p>
+                                            <button class="btn p-0" onclick="toggleComments(this.id)" id="commentbutton+@i">
+                                                <span class="text-muted"> Show all comments</span>
+                                            </button>
+                                            <div id="ShowComments+@i" style="display:none">
+                                                @for (int k = 0; k < Convert.ToInt32(ViewData["comment_count"]); k++)
+                                                {
+                                                    if (ViewData["Post_ID" + "comment" + k.ToString()].ToString() == ViewData["Post_ID" + "Post" + i.ToString()].ToString())
+                                                    {
+                                                        <div>
+                                                            <div>
+                                                                <strong class="d-block">@ViewData["Username" + "comment" + k.ToString()]</strong>
+                                                                <span>@ViewData["comment" + "comment" + k.ToString()]</span>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                            <br />
+                                            <small class="text-muted">Posted at @ViewData["Post_Date" + "Post" + i.ToString()]  @ViewData["Post_Time" + "Post" + i.ToString()] </small>
+                                        </div>
 
-                                    <br />
-                                    <small class="text-muted">Posted at @ViewData["Post_Date" + "Post" + i.ToString()]  @ViewData["Post_Time" + "Post" + i.ToString()] </small>
+                                        <div class="position-relative comment-box">
+                                            <form>
+                                                <input class="w-100 border-0 p-3 input-post" id="commenttext+@ViewData["Post_ID" + "Post" + i.ToString()].ToString()" placeholder="Add a comment..." style="background-color:black;color:white">
+                                                <button class="btn btn-primary position-absolute btn-ig" id="comment+@ViewData["Post_ID" + "Post" + i.ToString()].ToString()" onclick="commentidgrabber(this.id)">Post</button>
+                                            </form>
+                                        </div>
+
+
                                     </div>
-
-                                    <div class="position-relative comment-box">
-                                        <form>
-                                            <input class="w-100 border-0 p-3 input-post" placeholder="Add a comment..." style="background-color:black;">
-                                            <button class="btn btn-primary position-absolute btn-ig">Post</button>
-                                        </form>
-                                    </div>
-
-
                                 </div>
-                            </div>
 
-                        </div>
+                            </div>
                         }
                         <!-- END OF POSTS -->
                     </div>
@@ -358,48 +496,48 @@
                             </div>
                         </div>*@
 
-                        <div class="mt-4">
-                            <div class="d-flex flex-row justify-content-between">
-                                <small class="text-muted font-weight-normal">Suggestions For You</small>
-                                <small>See All</small>
+                    <div class="mt-4">
+                        <div class="d-flex flex-row justify-content-between">
+                            <small class="text-muted font-weight-normal">Suggestions For You</small>
+                            <small>See All</small>
+                        </div>
+                        <div>
+                            <div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-3">
+                                <div class="d-flex flex-row align-items-center">
+                                    <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border sugest-profile-photo">
+                                        <img src="~/Data/Instagram/fallen12/fallen.jpg" alt="..."
+                                             style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
+                                    </div>
+                                    <strong class="ml-3 sugest-username">instagram</strong>
+                                </div>
+                                <button class="btn btn-primary btn-sm p-0 btn-ig ">Follow</button>
                             </div>
-                            <div>
-                                <div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-3">
-                                    <div class="d-flex flex-row align-items-center">
-                                        <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border sugest-profile-photo">
-                                            <img src="~/Data/Instagram/fallen12/fallen.jpg" alt="..."
-                                                 style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
-                                        </div>
-                                        <strong class="ml-3 sugest-username">instagram</strong>
+                            <div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-3">
+                                <div class="d-flex flex-row align-items-center">
+                                    <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border sugest-profile-photo">
+                                        <img src="~/Data/Instagram/fallen12/fallen.jpg" alt="..."
+                                             style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
                                     </div>
-                                    <button class="btn btn-primary btn-sm p-0 btn-ig ">Follow</button>
+                                    <strong class="ml-3 sugest-username">dccomics</strong>
                                 </div>
-                                <div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-3">
-                                    <div class="d-flex flex-row align-items-center">
-                                        <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border sugest-profile-photo">
-                                            <img src="~/Data/Instagram/fallen12/fallen.jpg" alt="..."
-                                                 style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
-                                        </div>
-                                        <strong class="ml-3 sugest-username">dccomics</strong>
+                                <button class="btn btn-primary btn-sm p-0 btn-ig ">Follow</button>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-3">
+                                <div class="d-flex flex-row align-items-center">
+                                    <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border sugest-profile-photo">
+                                        <img src="~/Data/Instagram/fallen12/fallen.jpg" alt="..."
+                                             style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
                                     </div>
-                                    <button class="btn btn-primary btn-sm p-0 btn-ig ">Follow</button>
+                                    <strong class="ml-3 sugest-username">thecw</strong>
                                 </div>
-                                <div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-3">
-                                    <div class="d-flex flex-row align-items-center">
-                                        <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center border sugest-profile-photo">
-                                            <img src="~/Data/Instagram/fallen12/fallen.jpg" alt="..."
-                                                 style="transform: scale(1.5); width: 100%; position: absolute; left: 0;">
-                                        </div>
-                                        <strong class="ml-3 sugest-username">thecw</strong>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm p-0 btn-ig">Follow</button>
-                                </div>
+                                <button class="btn btn-primary btn-sm p-0 btn-ig">Follow</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     </div>
 

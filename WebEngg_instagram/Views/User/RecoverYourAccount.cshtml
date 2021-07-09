@@ -6,12 +6,32 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Reset Password Form  Responsive Widget Template | Home :: w3layouts</title>
+    <link href="~/Content/reset.css" rel="stylesheet" type="text/css" media="all">
+    <!-- Custom Theme files -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="keywords" content="Reset Password Form Responsive, Login form web template, Sign up Web Templates, Flat Web Templates, Login signup Responsive web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design">
+    <!--google fonts-->
+    <link href="file://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900" rel="stylesheet" type="text/css">
 </head>
-<body>
-    <div>
-        Account Recovery
+<body style="background-color:black;">
+    <!--element start here-->
+    <div class="elelment">
+        <h2>Reset Password Form</h2>
+        <div class="element-main" style="background-color:black;border:1px solid white">
+            <h1 style="color:white">Forgot Password</h1>
+            <p style="color:white;"> Please Enter Your Email to Reset your password.</p>
+            <form action="/User/ResetPassword" method="post">
+                <input type="text" name="Email" value="Your e-mail address" onfocus="this.value = &#39;&#39;;" onblur="if (this.value == &#39;&#39;) {this.value = &#39;Your e-mail address&#39;;}">
+                <input type="submit" value="Reset my Password" style="background-color:black;color:white;border:1px solid white">
+            </form>
+        </div>
     </div>
+
+    <!--element end here-->
+
 </body>
 </html>

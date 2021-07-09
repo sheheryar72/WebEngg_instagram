@@ -106,5 +106,23 @@ namespace WebEngg_instagram.Models
             return dt;
         }
 
+        public string GetProfile(string Username)
+        {
+            string link = "";
+            string query = "Select Profile_pic from User_Info where Username = @user";
+            DataTable dt = new DataTable();
+            string Type = "TEXT";
+            DatabaseHelper DH = new DatabaseHelper(connStr);
+            var parameters = new Dictionary<string, object>()
+            {
+                {"user",Username}
+            };
+            dt = DH.GetData(query, Type, parameters);
+            if(dt.Rows.Count>0)
+                link = dt.Rows[0]["Profile_Pic"].ToString();
+            
+            return link;
+        }
+
     }
 }

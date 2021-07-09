@@ -22,7 +22,7 @@ namespace WebEngg_instagram.Models
             
             string Userinfo = "Select * from User_Info where username = @user";
 
-            string post = "Select * from Post where username = @user order by Post_ID ASC";
+            string post = "Select * from Post where username = @user";
             
             string followers = "Select * from followers where username = @user";
             string following = "Select * from followers where Follower_ID = @user";
@@ -30,8 +30,8 @@ namespace WebEngg_instagram.Models
             string likes = "Select * from Likes where Post_ID in (Select Post_ID from Post where username = @user)";
             string comments = "Select * from Comments where Post_ID in (Select Post_ID from Post where username = @user)";
 
-            string No_of_comments = "select Post_ID ,Count(Post_ID) As No_of_Comments from Comments where Post_ID in (Select Post_ID from Post where Username = @user) group by Post_ID order by Post_ID ASC";
-            string No_of_likes = "select Post_ID ,Count(Post_ID) As No_of_Likes from Likes where Post_ID in (Select Post_ID from Post where Username = @user) group by Post_ID order by Post_ID ASC";
+            string No_of_comments = "select P.Post_ID , Count(C.Post_ID) as No_of_comments from Post P left join Comments C on P.Post_ID = C.Post_ID where P.Username = @user group by P.Post_ID ";
+            string No_of_likes = "select P.Post_ID , Count(L.Post_ID) as No_of_likes from Post P left join Likes L on P.Post_ID = L.Post_ID where P.Username = @user group by P.Post_ID";
 
             dta[0] = DataExtractor(Userinfo, username);
             dta[1] = DataExtractor(post, username);
